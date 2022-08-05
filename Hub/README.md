@@ -13,7 +13,7 @@ userPrincipalName=$(az ad signed-in-user show --query userPrincipalName --output
 location=westus2
 hmsRgName=HmsRG
 iotHubName=OsscJpDevInfra
-iotDeviceId=mydevice1
+iotDeviceID=mydevice1
 ```
 
 #### Check
@@ -23,7 +23,7 @@ echo $userPrincipalName
 echo $location
 echo $hmsRgName
 echo $iotHubName
-echo $iotDeviceId
+echo $iotDeviceID
 ```
 
 ### Creating
@@ -41,12 +41,12 @@ az iot hub create \
 az iot hub show-connection-string --hub-name $iotHubName
 
 az iot hub device-identity create \
-  --device-id $iotDeviceId \
+  --device-id $iotDeviceID \
   --hub-name $iotHubName
 
 # Copy and save the connection string.
 az iot hub device-identity show-connection-string \
-  --device-id $iotDeviceId \
+  --device-id $iotDeviceID \
   --hub-name $iotHubName
   --output table
 
