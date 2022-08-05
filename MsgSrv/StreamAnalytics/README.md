@@ -27,7 +27,7 @@ echo $storageAccountName
 ```
 
 ### Creating
-It is also possible to upload JSON files to Cloud Shell for use.
+It is also possible to upload JSON files to Cloud Shell for use.  
 Some values in the JSON file need to be modified.
 
 ```Bash
@@ -67,5 +67,5 @@ az stream-analytics job start \
 ```
 
 ### Reference
-- Azure IoT Hubチュートリアル - マイクロソフト系技術情報 Wiki
+- Azure IoT Hubチュートリアル - マイクロソフト系技術情報 Wiki  
 https://techinfoofmicrosofttech.osscons.jp/index.php?Azure%20IoT%20Hub%E3%83%81%E3%83%A5%E3%83%BC%E3%83%88%E3%83%AA%E3%82%A2%E3%83%AB
