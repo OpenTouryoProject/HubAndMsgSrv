@@ -27,6 +27,7 @@ echo $storageAccountName
 ```
 
 ### Creating
+You can also upload and use files in Cloud Shell.
 
 ```Bash
 
