@@ -1,0 +1,10 @@
+{
+    "type": "Microsoft.Devices/IotHubs",
+    "properties": {
+        "iotHubNamespace": "OsscJpDevInfra",
+        "sharedAccessPolicyName": "iothubowner",
+        "sharedAccessPolicyKey": "sharedAccessPolicyKey=",
+        "consumerGroupName": "sdkconsumergroup",
+        "endpoint": "messages/events"
+    }
+}
