@@ -1,10 +1,22 @@
 {
-    "type": "Microsoft.Devices/IotHubs",
-    "properties": {
-        "iotHubNamespace": "OsscJpDevInfra",
-        "sharedAccessPolicyName": "iothubowner",
-        "sharedAccessPolicyKey": "sharedAccessPolicyKey=",
-        "consumerGroupName": "sdkconsumergroup",
-        "endpoint": "messages/events"
+    "type": "Stream",
+    "datasource": {
+        "type": "Microsoft.Devices/IotHubs",
+        "properties": {
+            "iotHubNamespace": "OsscJpDevInfra",
+            "sharedAccessPolicyName": "iothubowner",
+            "sharedAccessPolicyKey": "XXXXXXXXXX",
+            "endpoint": "messages/events",
+            "consumerGroupName": "$Default"
+            }
+    },
+    "compression": {
+        "type": "None"
+    },
+    "serialization": {
+        "type": "Json",
+        "properties": {
+            "encoding": "UTF8"
+        }
     }
-}
+}    

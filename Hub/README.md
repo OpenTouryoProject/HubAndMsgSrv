@@ -46,7 +46,7 @@ az iot hub device-identity create \
   --hub-name $iotHubName
 
 # Copy and save the connection string.
-az iot hub device-identity show-connection-string \
+az iot hub device-identity connection-string show \
   --device-id $iotDeviceID \
   --hub-name $iotHubName \
   --output table

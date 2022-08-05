@@ -27,17 +27,22 @@ echo $storageAccountName
 ```
 
 ### Creating
-You can also upload and use files in Cloud Shell.
+It is also possible to upload JSON files to Cloud Shell for use.
+Some values in the JSON file need to be modified.
 
 ```Bash
+az storage account keys list --account-name $storageAccountName
+
+az stream-analytics job create \
+  --resource-group $hmsRgName \
+  --job-name $streamAnalyticsJobName \
+  --location $location
 
 az stream-analytics input create \
   --resource-group $hmsRgName \
   --job-name $streamAnalyticsJobName \
   --name input2storage \
-  --type Stream \
-  --datasource datasource.json \
-  --serialization serialization.json
+  --properties datasource.json
 
 az stream-analytics output create \
   --resource-group $hmsRgName \
@@ -51,7 +56,7 @@ az stream-analytics transformation create \
   --job-name $streamAnalyticsJobName \
   --name transformation2storage \
   --streaming-units "1" \
-  --transformation-query "SELECT * INTO output2storage FROM input2storage"
+  --saql "SELECT * INTO [output2storage] FROM [input2storage]"
 
 az stream-analytics job start \
   --resource-group $hmsRgName \
