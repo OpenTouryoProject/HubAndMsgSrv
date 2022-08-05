@@ -36,8 +36,7 @@ az iot hub create \
   --name $iotHubName \
   --resource-group $hmsRgName \
   --location $location \
-  --sku F1
-  --partition-count 2
+  --sku F1 --partition-count 2
 
 # Copy and save the connection string.
 az iot hub show-connection-string --hub-name $iotHubName
@@ -49,7 +48,7 @@ az iot hub device-identity create \
 # Copy and save the connection string.
 az iot hub device-identity show-connection-string \
   --device-id $iotDeviceID \
-  --hub-name $iotHubName
+  --hub-name $iotHubName \
   --output table
 
 ```
