@@ -27,6 +27,7 @@ echo $iotDeviceID
 ```
 
 ### Creating
+In Free Tier you only can use 2 partions.
 
 ```Bash
 az group create --name $hmsRgName --location $location
@@ -36,6 +37,7 @@ az iot hub create \
   --resource-group $hmsRgName \
   --location $location \
   --sku F1
+  --partition-count 2
 
 # Copy and save the connection string.
 az iot hub show-connection-string --hub-name $iotHubName
