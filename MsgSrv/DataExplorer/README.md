@@ -32,10 +32,11 @@ az extension add -n kusto
 # This command takes at least 10 minutes to run
 az kusto cluster create \
   --cluster-name $clusterName \
-  --resource-group $hmsRgName --location $location
+  --resource-group $hmsRgName \
+  --location $location  \
   --sku name="Standard_D11_v2"  tier="Standard" \
   --enable-streaming-ingest=true \
-  --enable-auto-stop=true \
+  --enable-auto-stop=true
 
 # Create a database in the cluster
 az kusto database create \
@@ -63,7 +64,7 @@ az kusto database-principal-assignment create \
   --tenant-id $(jq -r .tenantId <<< $MI_JSON) \
   --role Admin
 
-echo "Azure Data Explorer URL: $(az kusto cluster show --name $clusterName --resource-group $resourcegroup --query uri -o tsv)" 
+echo "Azure Data Explorer URL: $(az kusto cluster show --name $clusterName --resource-group $hmsRgName --query uri -o tsv)" 
 
 ```
 
