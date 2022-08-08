@@ -10,9 +10,9 @@ This IaC builds Azure Data Explorer.
 ```Bash
 location=westus2
 hmsRgName=HmsRG
-clusterName="osscjpdevinfra"
-databaseName="osscjpdevinfra"
-centralUrlPrefix="osscjpdevinfra"
+clusterName=osscjpdevinfra
+databaseName=phonedata
+centralUrlPrefix=osscjpdevinfra
 ```
 
 #### Check
@@ -66,6 +66,16 @@ az kusto database-principal-assignment create \
 
 echo "Azure Data Explorer URL: $(az kusto cluster show --name $clusterName --resource-group $hmsRgName --query uri -o tsv)" 
 
+```
+
+### Grant access
+Before accessing the cluster by URL after it has been built
+
+- Go to the cluster's database from the portal and
+- Grant access to the database with the following query
+
+```
+.add database <databaseName> users ('msauser=<Account name (e-mail address)>')
 ```
 
 ### Reference
