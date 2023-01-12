@@ -1,0 +1,1 @@
+Azure IoT HubのCloud側サンプル / テンプレ
