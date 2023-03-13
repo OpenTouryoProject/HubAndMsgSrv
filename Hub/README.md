@@ -149,7 +149,30 @@ az iot hub device-twin show -d $iotDeviceID --query properties.reported -n $iotH
 
 ##### Build project
 - [Device](./Device)
+  - Please set the value to DeviceConnectionString in advance.
+  - It can be executed from the following menu.  
+![image](https://user-images.githubusercontent.com/7278770/212090014-03b0fe2d-6ac7-40c1-b446-ec4f4bbb5888.png)
+    - SendD2C  
+Send D2C message
+    - ReceiveC2D  
+Receive C2D message
+    - UpdateTwinProperties  
+Update　twin properties
+    - UploadFiles  
+Upload files
+
 - [Cloud](./Cloud)
+  - Please set the value to HubConnectionString in advance.
+  - It can be executed from the following menu.  
+![image](https://user-images.githubusercontent.com/7278770/212092547-bb47118e-9276-41cc-8e05-9a1871ba1b2d.png)
+    - SendC2D  
+Send C2D message
+    - UpdateTwinTags  
+Update twin tags
+    - QueryTwinTags  
+Query twin tags
+    - ReceiveFileUploadNotification  
+Receive file upload notification
 
 ##### [Create a storage account and container](https://github.com/OpenTouryoProject/DxCommon/tree/master/AzureIaC/Storage)  
 ```Bash
