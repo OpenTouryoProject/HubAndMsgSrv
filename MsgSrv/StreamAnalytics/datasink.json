@@ -1,0 +1,15 @@
+{
+    "type": "Microsoft.Storage/Blob",
+    "properties": {
+        "storageAccounts": [
+            {
+                "accountName": "osscjpdevinfra",
+                "accountKey": "XXXXXXXXXX"
+            }
+        ],
+        "container": "state",
+        "pathPattern": "{date}/{time}",
+        "dateFormat": "yyyy/MM/dd",
+        "timeFormat": "HH"
+    }
+}
