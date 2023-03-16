@@ -97,16 +97,16 @@ namespace Cloud
 
         #region Command
         /// <summary>RootCommand</summary>
-        /// <param name="intOption"></param>
-        /// <param name="stringOption"></param>
-        /// <param name="intArgument"></param>
-        /// <param name="stringArgument"></param>
+        /// <param name="intOption">int</param>
+        /// <param name="stringOption">string</param>
+        /// <param name="intArgument">int</param>
+        /// <param name="stringArgument">string</param>
         /// <param name="console">IConsole</param>
-        /// <param name="token">CancellationToken</param>
+        /// <param name="cancellationToken">CancellationToken</param>
         private static async Task RootCommand(
             int intOption, string stringOption,
             int intArgument, string stringArgument,
-            IConsole console, CancellationToken token)
+            IConsole console, CancellationToken cancellationToken)
         {
             Console.WriteLine("command interactive (Ctrl-C terminate)");
 
@@ -138,6 +138,11 @@ namespace Cloud
                 case EnumMenu.QueryTwinTags:
                     // 更新確認
                     await QueryTwinTagsAsync(registryManager);
+                    break;
+
+                case EnumMenu.ReceiveFileUploadNotification:
+                    // 更新確認
+                    await ReceiveFileUploadNotificationAsync(serviceClient, cancellationToken);
                     break;
 
                 default:
@@ -240,6 +245,31 @@ namespace Cloud
               string.Join(", ", devices.Select(t => t.DeviceId)));
         }
 
+        /// <summary>ReceiveFileUploadNotificationAsync</summary>
+        /// <param name="serviceClient">ServiceClient</param>
+        /// <returns>Task</returns>
+        public static async Task ReceiveFileUploadNotificationAsync(
+            ServiceClient serviceClient, CancellationToken cancellationToken)
+        {
+            Console.WriteLine("Receiving file upload notification from service");
+
+            FileNotificationReceiver<FileNotification> fileNotificationReceiverFileNotification = serviceClient.GetFileNotificationReceiver();
+            while (true)
+            {
+                FileNotification fileNotification = await fileNotificationReceiverFileNotification.ReceiveAsync(cancellationToken);
+                if (fileNotification == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Received file upload notification: {0}", string.Join(", ", fileNotification.BlobName));
+                    Console.ResetColor();
+                    await fileNotificationReceiverFileNotification.CompleteAsync(fileNotification, cancellationToken);
+                }
+            }
+        }
         #endregion
 
         #region Test
@@ -265,7 +295,8 @@ namespace Cloud
         {
             SendC2D,
             UpdateTwinTags,
-            QueryTwinTags
+            QueryTwinTags,
+            ReceiveFileUploadNotification
         }
         #endregion
     }

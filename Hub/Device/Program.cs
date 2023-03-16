@@ -36,8 +36,12 @@ using Newtonsoft;
 using Newtonsoft.Json;
 using Microsoft.VisualBasic;
 using Microsoft.Azure.Amqp.Framing;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
+using Microsoft.Azure.Devices.Client.Transport;
+
 
 namespace Device
 {
@@ -95,16 +99,16 @@ namespace Device
 
         #region Command
         /// <summary>RootCommand</summary>
-        /// <param name="intOption"></param>
-        /// <param name="stringOption"></param>
-        /// <param name="intArgument"></param>
-        /// <param name="stringArgument"></param>
+        /// <param name="intOption">int</param>
+        /// <param name="stringOption">string</param>
+        /// <param name="intArgument">int</param>
+        /// <param name="stringArgument">string</param>
         /// <param name="console">IConsole</param>
-        /// <param name="token">CancellationToken</param>
+        /// <param name="cancellationToken">CancellationToken</param>
         private static async Task RootCommand(
             int intOption, string stringOption,
             int intArgument, string stringArgument,
-            IConsole console, CancellationToken token)
+            IConsole console, CancellationToken cancellationToken)
         {
             Console.WriteLine("command interactive (Ctrl-C terminate)");
 
@@ -130,6 +134,10 @@ namespace Device
                 case EnumMenu.UpdateTwinProperties:
                     // 受信
                     await UpdateTwinPropertiesAsync(deviceClient);
+                    break;
+                case EnumMenu.UploadFiles:
+                    // 受信
+                    await UploadFilesAsync(deviceClient);
                     break;
                 default:
                     break;
@@ -220,7 +228,7 @@ namespace Device
         /// <returns>Task</returns>
         public static async Task UpdateTwinPropertiesAsync(DeviceClient deviceClient)
         {
-            Console.WriteLine("Sending connectivity data as reported property");
+            Console.WriteLine("UpdateTwinProperties");
 
             await deviceClient.GetTwinAsync();
             TwinCollection reportedProperties, connectivity;
@@ -231,6 +239,43 @@ namespace Device
             await deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
         }
 
+        /// <summary>UploadFilesAsync</summary>
+        /// <param name="deviceClient">DeviceClient</param>
+        /// <returns>Task</returns>
+        public static async Task UploadFilesAsync(DeviceClient deviceClient)
+        {
+            Console.WriteLine("UploadFiles");
+            
+            // アップロードするファイルを作成する
+            string fileName = Guid.NewGuid().ToString() + ".txt";
+            File.WriteAllText(fileName, DateTime.Now.Ticks.ToString());
+            FileStream fs = new FileStream(fileName, FileMode.Open);
+
+            // アップロード先のSASURIを取得
+            FileUploadSasUriRequest fileUploadSasUriRequest = new FileUploadSasUriRequest
+            {
+                BlobName = fileName
+            };
+
+            FileUploadSasUriResponse sasUri = await deviceClient.GetFileUploadSasUriAsync(fileUploadSasUriRequest);
+
+            // SASURIを使ってBlob Storageにファイルアップロード
+            BlockBlobClient blockBlobClient = new BlockBlobClient(sasUri.GetBlobUri());
+            Azure.Response<BlobContentInfo> responseBlobContentInfo = await blockBlobClient.UploadAsync(fs, new BlobUploadOptions());
+
+            Console.WriteLine(responseBlobContentInfo.ToString());
+
+            // アップロードの完了通知
+            FileUploadCompletionNotification fileUploadCompletionNotification = new FileUploadCompletionNotification
+            {
+                CorrelationId = sasUri.CorrelationId,
+                IsSuccess = true,
+                StatusCode = 200,
+                StatusDescription = "Success"
+            };
+
+            await deviceClient.CompleteFileUploadAsync(fileUploadCompletionNotification);
+        }
         #endregion
 
         #region Test
@@ -244,7 +289,7 @@ namespace Device
 
             // await rootCommand.InvokeAsync("--hoge");
 
-            //  Device [options] [<intArgument> <stringArgument>]
+            // Device [options] [<intArgument> <stringArgument>]
             await rootCommand.InvokeAsync("");
         }
         #endregion
@@ -256,8 +301,8 @@ namespace Device
         {
             SendD2C,
             ReceiveC2D,
-            UpdateTwinProperties
-
+            UpdateTwinProperties,
+            UploadFiles
         }
         #endregion
     }
