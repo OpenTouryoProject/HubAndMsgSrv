@@ -107,7 +107,7 @@ iotedgedev solution init --template csharp
   - Choose or create an Azure IoT Edge device
 - Reference
   - https://learn.microsoft.com/ja-jp/azure/iot-edge/tutorial-develop-for-linux
-  - https://learn.microsoft.com/ja-jp/azure/iot-edge/tutorial-develop-for-linux
+  - https://github.com/OpenTouryoProject/HubAndMsgSrv/pull/5/files?w=1
 
 #### Deployment
 This shell is executed at the VSCode GitBash terminal.
